@@ -13,6 +13,25 @@ body {
 header { max-width: 960px; margin: 0 auto; padding: 40px 16px 8px; }
 h1 { margin: 0 0 6px; font-size: clamp(1.6rem, 4vw, 2.2rem); }
 header p { margin: 0; color: var(--muted); }
+#picker {
+  max-width: 960px; margin: 0 auto; padding: 20px 16px 0;
+  display: flex; flex-wrap: wrap; gap: 10px;
+}
+button.character {
+  all: unset; cursor: pointer; display: flex; align-items: center; gap: 8px;
+  padding: 6px 16px 6px 6px; border-radius: 999px; font-weight: 600; font-size: .95rem;
+  color: var(--ink); background: rgba(255,255,255,.45); border: 2px solid transparent;
+  transition: background .15s ease, border-color .15s ease;
+}
+button.character img { width: 36px; height: 36px; object-fit: contain; }
+button.character:hover { background: rgba(255,255,255,.75); }
+button.character[aria-selected="true"] { background: var(--accent); color: #fff; }
+button.character:focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; }
+@media (prefers-color-scheme: dark) {
+  button.character { background: rgba(255,255,255,.08); }
+  button.character:hover { background: rgba(255,255,255,.16); }
+  button.character[aria-selected="true"] { background: var(--accent); color: #0d1716; }
+}
 main {
   max-width: 960px; margin: 0 auto; padding: 24px 16px 64px;
   display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));

@@ -1,11 +1,32 @@
-const STICKERS = [
-  ['01-laughing', 'Laughing'], ['02-crying', 'Crying'], ['03-get-back-to-work', 'Get back to work!'],
-  ['04-thumbs-up', 'Thumbs up'], ['05-shocked', 'Shocked'], ['06-love-savings', 'Love savings'],
-  ['07-sleepy', 'Sleepy'], ['08-celebrate', 'Celebrate'], ['09-thinking', 'Thinking'],
-  ['10-youve-got-this', "You've got this!"], ['11-money', 'Money'], ['12-facepalm', 'Facepalm'],
+// Each character has a folder under stickers/ and a list of [file, label] pairs.
+// The first character is the one shown when the page opens.
+const CHARACTERS = [
+  {
+    id: 'wombie',
+    name: 'Wombie',
+    avatar: '04-thumbs-up',
+    stickers: [
+      ['01-laughing', 'Laughing'], ['02-crying', 'Crying'], ['03-get-back-to-work', 'Get back to work!'],
+      ['04-thumbs-up', 'Thumbs up'], ['05-shocked', 'Shocked'], ['06-love-savings', 'Love savings'],
+      ['07-sleepy', 'Sleepy'], ['08-celebrate', 'Celebrate'], ['09-thinking', 'Thinking'],
+      ['10-youve-got-this', "You've got this!"], ['11-money', 'Money'], ['12-facepalm', 'Facepalm'],
+    ],
+  },
+  {
+    id: 'case-manager-bm',
+    name: 'Case Manager BM',
+    avatar: '05-thumbs-up',
+    stickers: [
+      ['01-on-the-phone', 'On the phone'], ['02-laughing', 'Laughing'], ['03-crying', 'Crying'],
+      ['04-get-back-to-work', 'Get back to work!'], ['05-thumbs-up', 'Thumbs up'], ['06-shocked', 'Shocked'],
+      ['07-love-savings', 'Love savings'], ['08-sleepy', 'Sleepy'], ['09-celebrate', 'Celebrate'],
+      ['10-thinking', 'Thinking'], ['11-youve-got-this', "You've got this!"], ['12-facepalm', 'Facepalm'],
+    ],
+  },
 ];
 
 const grid = document.getElementById('grid');
+const picker = document.getElementById('picker');
 const toast = document.getElementById('toast');
 let toastTimer;
 
@@ -28,9 +49,9 @@ if (isLocalFile) {
 
 async function pngBlob(src) {
   if (isLocalFile) {
-    const name = src.split('/').pop().replace('.png', '');
-    const b64 = window.STICKER_DATA && window.STICKER_DATA[name];
-    if (!b64) throw new Error('Embedded sticker not loaded: ' + name);
+    const key = src.replace(/^stickers\//, '').replace(/\.png$/, '');
+    const b64 = window.STICKER_DATA && window.STICKER_DATA[key];
+    if (!b64) throw new Error('Embedded sticker not loaded: ' + key);
     const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
     return new Blob([bytes], { type: 'image/png' });
   }
@@ -39,36 +60,53 @@ async function pngBlob(src) {
   return new Blob([await res.arrayBuffer()], { type: 'image/png' });
 }
 
-// Test mode: open the site with ?html in the address to also put an HTML <img> that
-// points at the hosted PNG on the clipboard. Apps that prefer HTML then load the
-// original file instead of the bitmap Windows keeps on the clipboard.
-const HTML_MODE = new URLSearchParams(location.search).has('html') && !isLocalFile;
-
-async function copySticker(src, label) {
+async function copySticker(src) {
   if (!navigator.clipboard || typeof ClipboardItem === 'undefined') throw new Error('unsupported');
   // Pass a promise so Safari keeps the click's user activation while the image loads.
-  const data = { 'image/png': pngBlob(src) };
-  if (HTML_MODE) {
-    const url = new URL(src, location.href).href;
-    data['text/html'] = new Blob([`<img src="${url}" alt="${label}">`], { type: 'text/html' });
-  }
-  await navigator.clipboard.write([new ClipboardItem(data)]);
+  await navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob(src) })]);
 }
 
-for (const [file, label] of STICKERS) {
-  const src = `stickers/${file}.png`;
-  const btn = document.createElement('button');
-  btn.className = 'sticker';
-  btn.title = `Copy "${label}"`;
-  btn.innerHTML = `<img src="${src}" alt="${label}" loading="lazy"><span>${label}</span>`;
-  btn.addEventListener('click', async () => {
-    try {
-      await copySticker(src, label);
-      showToast('Copied! Paste it into Teams');
-    } catch (err) {
-      console.warn(err);
-      showToast('Your browser blocked copying. Right-click the sticker and choose "Copy image".', true);
-    }
-  });
-  grid.appendChild(btn);
+function renderGrid(character) {
+  grid.replaceChildren();
+  for (const [file, label] of character.stickers) {
+    const src = `stickers/${character.id}/${file}.png`;
+    const btn = document.createElement('button');
+    btn.className = 'sticker';
+    btn.title = `Copy "${label}"`;
+    btn.innerHTML = `<img src="${src}" alt="${character.name}: ${label}" loading="lazy"><span>${label}</span>`;
+    btn.addEventListener('click', async () => {
+      try {
+        await copySticker(src);
+        showToast('Copied! Paste it into Teams');
+      } catch (err) {
+        console.warn(err);
+        showToast('Your browser blocked copying. Right-click the sticker and choose "Copy image".', true);
+      }
+    });
+    grid.appendChild(btn);
+  }
 }
+
+function selectCharacter(id) {
+  const character = CHARACTERS.find(c => c.id === id) || CHARACTERS[0];
+  for (const tab of picker.children) {
+    tab.setAttribute('aria-selected', String(tab.dataset.id === character.id));
+  }
+  renderGrid(character);
+}
+
+for (const character of CHARACTERS) {
+  const tab = document.createElement('button');
+  tab.className = 'character';
+  tab.setAttribute('role', 'tab');
+  tab.dataset.id = character.id;
+  tab.innerHTML = `<img src="stickers/${character.id}/${character.avatar}.png" alt=""><span>${character.name}</span>`;
+  tab.addEventListener('click', () => {
+    // Keep the choice in the address so a link can open straight to a character.
+    history.replaceState(null, '', '#' + character.id);
+    selectCharacter(character.id);
+  });
+  picker.appendChild(tab);
+}
+
+selectCharacter(location.hash.slice(1));
