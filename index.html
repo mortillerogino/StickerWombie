@@ -4,51 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Just Budget Stickers</title>
-<style>
-  :root {
-    --bg: #cfe1de; --ink: #173a40; --muted: #44646a;
-    --accent: #12606b; --ring: rgba(18, 96, 107, .35);
-  }
-  @media (prefers-color-scheme: dark) {
-    :root { --bg: #15201f; --ink: #e8efee; --muted: #9bb0ae; --accent: #5cc2c9; --ring: rgba(92, 194, 201, .4); }
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0; background: var(--bg); color: var(--ink);
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  }
-  header { max-width: 960px; margin: 0 auto; padding: 40px 16px 8px; }
-  h1 { margin: 0 0 6px; font-size: clamp(1.6rem, 4vw, 2.2rem); }
-  header p { margin: 0; color: var(--muted); }
-  main {
-    max-width: 960px; margin: 0 auto; padding: 24px 16px 64px;
-    display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  }
-  button.sticker {
-    all: unset; cursor: pointer; padding: 6px; border-radius: 18px;
-    display: flex; flex-direction: column; align-items: center; gap: 6px;
-  }
-  button.sticker img {
-    width: 100%; aspect-ratio: 1; object-fit: contain;
-    filter: drop-shadow(0 3px 4px rgba(0,0,0,.22));
-    transition: transform .15s ease, filter .15s ease;
-  }
-  button.sticker:nth-child(odd) img { transform: rotate(-2deg); }
-  button.sticker:nth-child(even) img { transform: rotate(2deg); }
-  button.sticker:hover img { transform: translateY(-4px) rotate(0deg) scale(1.04); filter: drop-shadow(0 10px 12px rgba(0,0,0,.25)); }
-  button.sticker:active img { transform: scale(.95); }
-  button.sticker:focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; }
-  button.sticker span { font-size: .85rem; color: var(--muted); }
-  #toast {
-    position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px);
-    background: var(--accent); color: #fff; padding: 12px 18px; border-radius: 999px;
-    font-weight: 600; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
-    max-width: calc(100% - 32px); text-align: center;
-  }
-  #toast.show { opacity: 1; transform: translate(-50%, 0); }
-  #toast.warn { background: #8a4b12; }
-  footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 0 16px 32px; }
-</style>
+<link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 <header>
@@ -58,71 +14,6 @@
 <main id="grid"></main>
 <footer>If copying doesn't work in your browser, right-click a sticker and choose "Copy image".</footer>
 <div id="toast" role="status" aria-live="polite"></div>
-<script>
-  const STICKERS = [
-    ['01-laughing', 'Laughing'], ['02-crying', 'Crying'], ['03-get-back-to-work', 'Get back to work!'],
-    ['04-thumbs-up', 'Thumbs up'], ['05-shocked', 'Shocked'], ['06-love-savings', 'Love savings'],
-    ['07-sleepy', 'Sleepy'], ['08-celebrate', 'Celebrate'], ['09-thinking', 'Thinking'],
-    ['10-youve-got-this', "You've got this!"], ['11-money', 'Money'], ['12-facepalm', 'Facepalm'],
-  ];
-
-  const grid = document.getElementById('grid');
-  const toast = document.getElementById('toast');
-  let toastTimer;
-
-  function showToast(msg, warn = false) {
-    toast.textContent = msg;
-    toast.classList.toggle('warn', warn);
-    toast.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), warn ? 4000 : 1800);
-  }
-
-  // Browsers refuse fetch() on file:// pages, so when the page is opened as a local
-  // file we load embedded copies of the stickers instead.
-  const isLocalFile = location.protocol === 'file:';
-  if (isLocalFile) {
-    const s = document.createElement('script');
-    s.src = 'stickers/data.js';
-    document.head.appendChild(s);
-  }
-
-  async function pngBlob(src) {
-    if (isLocalFile) {
-      const name = src.split('/').pop().replace('.png', '');
-      const b64 = window.STICKER_DATA && window.STICKER_DATA[name];
-      if (!b64) throw new Error('Embedded sticker not loaded: ' + name);
-      const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
-      return new Blob([bytes], { type: 'image/png' });
-    }
-    const res = await fetch(src);
-    if (!res.ok) throw new Error('Could not load ' + src);
-    return new Blob([await res.arrayBuffer()], { type: 'image/png' });
-  }
-
-  async function copySticker(src) {
-    if (!navigator.clipboard || typeof ClipboardItem === 'undefined') throw new Error('unsupported');
-    // Pass a promise so Safari keeps the click's user activation while the image loads.
-    await navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob(src) })]);
-  }
-
-  for (const [file, label] of STICKERS) {
-    const src = `stickers/${file}.png`;
-    const btn = document.createElement('button');
-    btn.className = 'sticker';
-    btn.title = `Copy "${label}"`;
-    btn.innerHTML = `<img src="${src}" alt="${label}" loading="lazy"><span>${label}</span>`;
-    btn.addEventListener('click', async () => {
-      try {
-        await copySticker(src);
-        showToast('Copied! Paste it into Teams');
-      } catch (err) {
-        console.warn(err);
-        showToast('Your browser blocked copying. Right-click the sticker and choose "Copy image".', true);
-      }
-    });
-    grid.appendChild(btn);
-  }
-</script>
+<script src="js/app.js"></script>
 </body>
 </html>

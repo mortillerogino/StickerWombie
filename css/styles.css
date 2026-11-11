@@ -1,0 +1,43 @@
+:root {
+  --bg: #cfe1de; --ink: #173a40; --muted: #44646a;
+  --accent: #12606b; --ring: rgba(18, 96, 107, .35);
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #15201f; --ink: #e8efee; --muted: #9bb0ae; --accent: #5cc2c9; --ring: rgba(92, 194, 201, .4); }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+header { max-width: 960px; margin: 0 auto; padding: 40px 16px 8px; }
+h1 { margin: 0 0 6px; font-size: clamp(1.6rem, 4vw, 2.2rem); }
+header p { margin: 0; color: var(--muted); }
+main {
+  max-width: 960px; margin: 0 auto; padding: 24px 16px 64px;
+  display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+button.sticker {
+  all: unset; cursor: pointer; padding: 6px; border-radius: 18px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+button.sticker img {
+  width: 100%; aspect-ratio: 1; object-fit: contain;
+  filter: drop-shadow(0 3px 4px rgba(0,0,0,.22));
+  transition: transform .15s ease, filter .15s ease;
+}
+button.sticker:nth-child(odd) img { transform: rotate(-2deg); }
+button.sticker:nth-child(even) img { transform: rotate(2deg); }
+button.sticker:hover img { transform: translateY(-4px) rotate(0deg) scale(1.04); filter: drop-shadow(0 10px 12px rgba(0,0,0,.25)); }
+button.sticker:active img { transform: scale(.95); }
+button.sticker:focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; }
+button.sticker span { font-size: .85rem; color: var(--muted); }
+#toast {
+  position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px);
+  background: var(--accent); color: #fff; padding: 12px 18px; border-radius: 999px;
+  font-weight: 600; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
+  max-width: calc(100% - 32px); text-align: center;
+}
+#toast.show { opacity: 1; transform: translate(-50%, 0); }
+#toast.warn { background: #8a4b12; }
+footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 0 16px 32px; }

@@ -6,7 +6,9 @@ Open the site, click a sticker, and paste it into Teams with Ctrl+V (Cmd+V on Ma
 
 ## Files
 
-- `index.html` is the whole site, with no build step.
+- `index.html` is the page markup, with no build step.
+- `css/styles.css` holds the styles.
+- `js/app.js` builds the sticker grid and handles copying.
 - `stickers/` holds the 12 transparent PNG stickers.
 - `stickers/data.js` holds embedded copies of the stickers, so copying also works when `index.html` is opened as a local file.
 
