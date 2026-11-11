@@ -21,10 +21,17 @@ const CHARACTERS = [
       ['04-get-back-to-work', 'Get back to work!'], ['05-thumbs-up', 'Thumbs up'], ['06-shocked', 'Shocked'],
       ['07-love-savings', 'Love savings'], ['08-sleepy', 'Sleepy'], ['09-celebrate', 'Celebrate'],
       ['10-thinking', 'Thinking'], ['11-youve-got-this', "You've got this!"], ['12-facepalm', 'Facepalm'],
-      ['13-all-good', 'All good'], ['14-copy', 'Copy!'], ['15-overwhelmed', 'Overwhelmed'],
-      ['16-on-a-call', 'On a call'], ['17-on-it', 'On it!'], ['18-approved', 'Approved!'],
-      ['19-tea-time', 'Tea time'], ['20-thank-you', 'Thank you!'], ['21-hmm', 'Hmm...'],
-      ['22-hello', 'Hello!'], ['23-lunch', 'Lunch?'], ['24-logging-off', 'Logging off!'],
+    ],
+  },
+  {
+    id: 'case-manager-bm-2',
+    name: 'Case Manager BM 2',
+    avatar: '01-all-good',
+    stickers: [
+      ['01-all-good', 'All good'], ['02-copy', 'Copy!'], ['03-overwhelmed', 'Overwhelmed'],
+      ['04-on-a-call', 'On a call'], ['05-on-it', 'On it!'], ['06-approved', 'Approved!'],
+      ['07-tea-time', 'Tea time'], ['08-thank-you', 'Thank you!'], ['09-hmm', 'Hmm...'],
+      ['10-hello', 'Hello!'], ['11-lunch', 'Lunch?'], ['12-logging-off', 'Logging off!'],
     ],
   },
 ];
