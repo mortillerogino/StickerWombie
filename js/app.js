@@ -39,10 +39,20 @@ async function pngBlob(src) {
   return new Blob([await res.arrayBuffer()], { type: 'image/png' });
 }
 
-async function copySticker(src) {
+// Test mode: open the site with ?html in the address to also put an HTML <img> that
+// points at the hosted PNG on the clipboard. Apps that prefer HTML then load the
+// original file instead of the bitmap Windows keeps on the clipboard.
+const HTML_MODE = new URLSearchParams(location.search).has('html') && !isLocalFile;
+
+async function copySticker(src, label) {
   if (!navigator.clipboard || typeof ClipboardItem === 'undefined') throw new Error('unsupported');
   // Pass a promise so Safari keeps the click's user activation while the image loads.
-  await navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob(src) })]);
+  const data = { 'image/png': pngBlob(src) };
+  if (HTML_MODE) {
+    const url = new URL(src, location.href).href;
+    data['text/html'] = new Blob([`<img src="${url}" alt="${label}">`], { type: 'text/html' });
+  }
+  await navigator.clipboard.write([new ClipboardItem(data)]);
 }
 
 for (const [file, label] of STICKERS) {
@@ -53,7 +63,7 @@ for (const [file, label] of STICKERS) {
   btn.innerHTML = `<img src="${src}" alt="${label}" loading="lazy"><span>${label}</span>`;
   btn.addEventListener('click', async () => {
     try {
-      await copySticker(src);
+      await copySticker(src, label);
       showToast('Copied! Paste it into Teams');
     } catch (err) {
       console.warn(err);
