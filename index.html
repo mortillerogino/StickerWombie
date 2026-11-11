@@ -6,11 +6,11 @@
 <title>Just Budget Stickers</title>
 <style>
   :root {
-    --bg: #f4f1ea; --card: #ffffff; --ink: #1f3b40; --muted: #5d7377;
+    --bg: #cfe1de; --ink: #173a40; --muted: #44646a;
     --accent: #12606b; --ring: rgba(18, 96, 107, .35);
   }
   @media (prefers-color-scheme: dark) {
-    :root { --bg: #15201f; --card: #1f2c2b; --ink: #e8efee; --muted: #9bb0ae; --accent: #5cc2c9; --ring: rgba(92, 194, 201, .4); }
+    :root { --bg: #15201f; --ink: #e8efee; --muted: #9bb0ae; --accent: #5cc2c9; --ring: rgba(92, 194, 201, .4); }
   }
   * { box-sizing: border-box; }
   body {
@@ -25,14 +25,19 @@
     display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
   button.sticker {
-    all: unset; cursor: pointer; background: var(--card); border-radius: 18px;
-    padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,.08); transition: transform .12s ease, box-shadow .12s ease;
+    all: unset; cursor: pointer; padding: 6px; border-radius: 18px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
   }
-  button.sticker:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,.12); }
-  button.sticker:active { transform: scale(.96); }
+  button.sticker img {
+    width: 100%; aspect-ratio: 1; object-fit: contain;
+    filter: drop-shadow(0 3px 4px rgba(0,0,0,.22));
+    transition: transform .15s ease, filter .15s ease;
+  }
+  button.sticker:nth-child(odd) img { transform: rotate(-2deg); }
+  button.sticker:nth-child(even) img { transform: rotate(2deg); }
+  button.sticker:hover img { transform: translateY(-4px) rotate(0deg) scale(1.04); filter: drop-shadow(0 10px 12px rgba(0,0,0,.25)); }
+  button.sticker:active img { transform: scale(.95); }
   button.sticker:focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; }
-  button.sticker img { width: 100%; aspect-ratio: 1; object-fit: contain; }
   button.sticker span { font-size: .85rem; color: var(--muted); }
   #toast {
     position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px);
