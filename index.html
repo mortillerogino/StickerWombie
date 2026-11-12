@@ -13,8 +13,35 @@
 </header>
 <nav id="picker" role="tablist" aria-label="Choose a character"></nav>
 <main id="grid"></main>
+<section id="request" aria-labelledby="request-title">
+  <h2 id="request-title">Would you like to be added as a sticker?</h2>
+  <p>Send us your best picture and we'll turn you into a sticker.</p>
+  <form name="sticker-request" method="POST" data-netlify="true" netlify-honeypot="bot-field" enctype="multipart/form-data" id="request-form">
+    <input type="hidden" name="form-name" value="sticker-request">
+    <p class="hidden"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+    <div class="fields">
+      <label>Your name <input name="name" required autocomplete="name"></label>
+      <label>Your email <input name="email" type="email" required autocomplete="email"></label>
+    </div>
+    <label class="dropzone" id="dropzone">
+      <input type="file" name="photo" id="photo" accept="image/png,image/jpeg" required>
+      <span class="dz-empty">
+        <strong>Drag and drop your photo here</strong>
+        <span>or <u>choose a file</u> · PNG or JPG, up to 25 MB</span>
+      </span>
+      <span class="dz-preview" hidden>
+        <img id="photo-preview" alt="">
+        <span id="photo-name"></span>
+      </span>
+    </label>
+    <label class="consent"><input type="checkbox" name="consent" value="yes" required> I'm happy for my picture to be turned into a sticker for this site.</label>
+    <button type="submit" id="request-submit">Send my picture</button>
+    <p id="request-status" role="status" aria-live="polite"></p>
+  </form>
+</section>
 <footer>If copying doesn't work in your browser, right-click a sticker and choose "Copy image".</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 <script src="js/app.js"></script>
+<script src="js/request.js"></script>
 </body>
 </html>
