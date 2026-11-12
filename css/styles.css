@@ -279,7 +279,8 @@ button.sticker {
 .sticker.loaded .frame::before { opacity: 0; animation: none; }
 @keyframes shimmer { from { background-position: 100% 0; } to { background-position: -150% 0; } }
 .sticker img {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: 50% 100%;
+  /* Height-led, so every sticker is drawn at the same scale; extra-wide ones spill slightly sideways */
+  position: absolute; bottom: 0; left: 50%; translate: -50% 0; height: 100%; width: auto; max-width: none;
   filter: drop-shadow(0 4px 5px rgba(14, 52, 57, .18)) drop-shadow(0 1px 1px rgba(14, 52, 57, .14));
   opacity: 0; transform: scale(.94);
   transition: opacity 420ms ease, transform 520ms var(--ease-out), filter 260ms ease;
