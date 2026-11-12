@@ -91,26 +91,40 @@ function renderGrid(character) {
   }
 }
 
+const requestSection = document.getElementById('request');
+const REQUEST_ID = 'request';
+
+// Shows a character's stickers, or the "Request Sticker" form when id is REQUEST_ID.
 function selectCharacter(id) {
+  const showRequest = id === REQUEST_ID;
   const character = CHARACTERS.find(c => c.id === id) || CHARACTERS[0];
+  const selectedId = showRequest ? REQUEST_ID : character.id;
   for (const tab of picker.children) {
-    tab.setAttribute('aria-selected', String(tab.dataset.id === character.id));
+    tab.setAttribute('aria-selected', String(tab.dataset.id === selectedId));
   }
-  renderGrid(character);
+  grid.hidden = showRequest;
+  requestSection.hidden = !showRequest;
+  if (!showRequest) renderGrid(character);
 }
 
-for (const character of CHARACTERS) {
+function addTab(id, className, html) {
   const tab = document.createElement('button');
-  tab.className = 'character';
+  tab.className = className;
   tab.setAttribute('role', 'tab');
-  tab.dataset.id = character.id;
-  tab.innerHTML = `<img src="stickers/${character.id}/${character.avatar}.png" alt=""><span>${character.name}</span>`;
+  tab.dataset.id = id;
+  tab.innerHTML = html;
   tab.addEventListener('click', () => {
-    // Keep the choice in the address so a link can open straight to a character.
-    history.replaceState(null, '', '#' + character.id);
-    selectCharacter(character.id);
+    // Keep the choice in the address so a link can open straight to a tab.
+    history.replaceState(null, '', '#' + id);
+    selectCharacter(id);
   });
   picker.appendChild(tab);
+}
+
+addTab(REQUEST_ID, 'character request-tab', '<span class="plus" aria-hidden="true">+</span><span>Request Sticker</span>');
+for (const character of CHARACTERS) {
+  addTab(character.id, 'character',
+    `<img src="stickers/${character.id}/${character.avatar}.png" alt=""><span>${character.name}</span>`);
 }
 
 selectCharacter(location.hash.slice(1));

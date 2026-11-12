@@ -26,6 +26,12 @@ button.character {
 button.character img { width: 36px; height: 36px; object-fit: contain; }
 button.character:hover { background: rgba(255,255,255,.75); }
 button.character[aria-selected="true"] { background: var(--accent); color: #fff; }
+button.character.request-tab { padding-left: 10px; border-style: dashed; border-color: var(--accent); }
+button.character .plus {
+  display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%;
+  background: var(--accent); color: #fff; font-size: 1.2rem; line-height: 1;
+}
+button.character.request-tab[aria-selected="true"] .plus { background: #fff; color: var(--accent); }
 button.character:focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; }
 @media (prefers-color-scheme: dark) {
   button.character { background: rgba(255,255,255,.08); }
@@ -64,7 +70,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 0 
 /* Sticker request form */
 [hidden] { display: none !important; }
 #request {
-  max-width: 640px; margin: 0 auto 48px; padding: 28px 24px;
+  max-width: 640px; margin: 24px auto 48px; padding: 28px 24px;
   background: rgba(255,255,255,.55); border-radius: 22px;
 }
 #request h2 { margin: 0 0 4px; font-size: 1.4rem; }
