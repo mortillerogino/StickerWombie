@@ -333,7 +333,7 @@ button.sticker:focus-visible .frame { transform: rotate(0deg) translateY(-4px) s
   display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(24px, 5vw, 64px); align-items: start;
 }
 #request { scroll-margin-top: 84px; }
-body.requesting footer { display: none; }
+body.requesting footer .tip { display: none; }
 #request:not([hidden]) > * { animation: rise 640ms var(--ease-out) both; }
 #request:not([hidden]) > *:nth-child(2) { animation-delay: 80ms; }
 .request-intro { padding-top: 12px; }
@@ -434,7 +434,19 @@ body.requesting footer { display: none; }
 
 /* ---------- Footer ---------- */
 footer { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter) calc(40px + env(safe-area-inset-bottom)); text-align: center; color: var(--muted); font-size: .86rem; }
-footer p { margin: 0; padding-top: 24px; border-top: 1px solid var(--line); }
+footer { display: grid; gap: 10px; }
+footer::before { content: ''; border-top: 1px solid var(--line); margin-bottom: 14px; }
+footer p { margin: 0; }
+footer .credit { font-size: .8rem; letter-spacing: .01em; }
+footer .credit a {
+  color: var(--ink-soft); font-weight: 600; text-decoration: none;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: color 200ms ease, background-size 260ms var(--ease-out);
+}
+footer .credit a:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; border-radius: 4px; }
+@media (hover: hover) and (pointer: fine) {
+  footer .credit a:hover { color: var(--accent); background-size: 100% 1px; }
+}
 footer strong { color: var(--ink-soft); }
 
 /* ---------- Responsive ---------- */
