@@ -20,4 +20,4 @@ Copying needs the site served over https.
 
 ## Sticker requests
 
-Submissions appear in Netlify under the site's **Forms** tab, in the `sticker-request` form. Each one has the person's name, email and a link to their photo. Form detection must be enabled for the site.
+Submissions appear in Netlify under the site's **Forms** tab, in the `sticker-request` form. Each one has the person's name, email, the sticker poses they'd like and a link to their photo. Form detection must be enabled for the site.

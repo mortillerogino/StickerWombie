@@ -73,11 +73,12 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 0 
 #request-form .hidden { display: none; }
 #request-form .fields { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
 #request-form label { display: grid; gap: 6px; font-weight: 600; font-size: .92rem; }
-#request-form input[type="text"], #request-form input:not([type]), #request-form input[type="email"] {
+#request-form input[type="text"], #request-form input:not([type]), #request-form input[type="email"], #request-form textarea {
   font: inherit; font-weight: 400; padding: 10px 12px; border-radius: 10px;
   border: 1.5px solid rgba(23,58,64,.25); background: #fff; color: #173a40;
 }
-#request-form input:focus-visible { outline: 3px solid var(--ring); outline-offset: 1px; }
+#request-form textarea { resize: vertical; min-height: 80px; }
+#request-form input:focus-visible, #request-form textarea:focus-visible { outline: 3px solid var(--ring); outline-offset: 1px; }
 .dropzone {
   position: relative; display: block !important; cursor: pointer; text-align: center;
   padding: 28px 16px; border: 2px dashed rgba(23,58,64,.35); border-radius: 16px;
