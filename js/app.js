@@ -12,6 +12,7 @@ const CHARACTERS = [
       ['10-youve-got-this', "You've got this!"], ['11-money', 'Money'], ['12-facepalm', 'Facepalm'],
       ['13-laptop-meltdown', 'Laptop meltdown'], ['14-downtime', 'Downtime'],
       ['15-lunch-orders', 'Lunch orders?'], ['16-im-sorry', "I'm sorry"],
+      ['17-logging-off', 'Logging off!'],
     ],
   },
   {
