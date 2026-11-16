@@ -42,12 +42,15 @@ let toastTimer;
 if (isMac) document.getElementById('paste-keys').innerHTML = '<kbd>⌘</kbd><kbd>V</kbd>';
 
 // Small WebP copies are shown on the page; the full PNG is what gets copied.
-const displaySrc = (id, file) => `stickers/${id}/web/${file}.webp`;
-const fullSrc = (id, file) => `stickers/${id}/${file}.png`;
+// Bump when sticker pictures change, so browsers and Teams fetch the new files
+// instead of a cached copy (stickers are cached for a week).
+const V = '?v=2';
+const displaySrc = (id, file) => `stickers/${id}/web/${file}.webp${V}`;
+const fullSrc = (id, file) => `stickers/${id}/${file}.png${V}`;
 // Moving versions. Teams loads these from the site when a copied web picture is pasted.
-const gifSrc = (id, file) => `stickers/${id}/gif/${file}.gif`;
+const gifSrc = (id, file) => `stickers/${id}/gif/${file}.gif${V}`;
 // The page shows animated WebP instead: smaller, smoother, and with soft edges.
-const animSrc = (id, file) => `stickers/${id}/anim/${file}.webp`;
+const animSrc = (id, file) => `stickers/${id}/anim/${file}.webp${V}`;
 
 // Stickers stay still unless the "Moving" switch is on; the choice is remembered.
 const motionToggle = document.getElementById('motion');
@@ -79,7 +82,7 @@ if (isLocalFile) {
 
 async function loadPng(src) {
   if (isLocalFile) {
-    const key = src.replace(/^stickers\//, '').replace(/\.png$/, '');
+    const key = src.replace(/\?.*$/, '').replace(/^stickers\//, '').replace(/\.png$/, '');
     const b64 = window.STICKER_DATA && window.STICKER_DATA[key];
     if (!b64) throw new Error('Embedded sticker not loaded: ' + key);
     const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
