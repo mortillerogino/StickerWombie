@@ -46,6 +46,8 @@ const displaySrc = (id, file) => `stickers/${id}/web/${file}.webp`;
 const fullSrc = (id, file) => `stickers/${id}/${file}.png`;
 // Moving versions. Teams loads these from the site when a copied web picture is pasted.
 const gifSrc = (id, file) => `stickers/${id}/gif/${file}.gif`;
+// The page shows animated WebP instead: smaller, smoother, and with soft edges.
+const animSrc = (id, file) => `stickers/${id}/anim/${file}.webp`;
 
 // Stickers stay still unless the "Moving" switch is on; the choice is remembered.
 const motionToggle = document.getElementById('motion');
@@ -137,7 +139,7 @@ function renderGrid(character) {
     const reveal = () => btn.classList.add('loaded');
     img.addEventListener('load', reveal, { once: true });
     img.addEventListener('error', reveal, { once: true });
-    img.src = moving && !isLocalFile ? gif : displaySrc(character.id, file);
+    img.src = moving && !isLocalFile ? animSrc(character.id, file) : displaySrc(character.id, file);
     if (img.complete) reveal();
 
     btn.addEventListener('pointerenter', () => { if (!isLocalFile) pngBlob(src); }, { once: true });
@@ -161,9 +163,11 @@ function renderGrid(character) {
 }
 
 motionToggle.checked = moving;
+document.body.classList.toggle('moving', moving && !isLocalFile);
 if (isLocalFile) motionToggle.closest('label').hidden = true;
 motionToggle.addEventListener('change', () => {
   moving = motionToggle.checked;
+  document.body.classList.toggle('moving', moving);
   try { localStorage.setItem('moving', moving ? '1' : '0'); } catch {}
   const character = CHARACTERS.find(c => c.id === currentId);
   if (character) renderGrid(character);

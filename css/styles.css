@@ -244,6 +244,9 @@ button.tab:focus-visible { outline: 3px solid var(--ring); outline-offset: 1px; 
 }
 .bar-end { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
 body.requesting .motion-toggle { display: none; }
+/* A drop-shadow filter is redrawn on every frame of an animated picture, which makes
+   the page stutter, so moving stickers go without it. */
+body.moving .sticker img, body.moving button.sticker:hover img { filter: none; }
 .motion-toggle {
   display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none;
   height: 40px; padding: 0 14px 0 8px; border-radius: 999px;
