@@ -10,6 +10,7 @@ const CHARACTERS = [
       ['04-thumbs-up', 'Thumbs up'], ['05-shocked', 'Shocked'], ['06-love-savings', 'Love savings'],
       ['07-sleepy', 'Sleepy'], ['08-celebrate', 'Celebrate'], ['09-thinking', 'Thinking'],
       ['10-youve-got-this', "You've got this!"], ['11-money', 'Money'], ['12-facepalm', 'Facepalm'],
+      ['13-laptop-meltdown', 'Laptop meltdown'],
     ],
   },
   {
