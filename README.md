@@ -14,6 +14,7 @@ Open the site, click a sticker, and paste it into Teams with Ctrl+V (Cmd+V on Ma
 - `stickers/<character>/web/` holds small WebP copies (440px) shown on the page so it loads fast; the full PNG is what gets copied. Regenerate them when adding stickers.
 - `fonts/` holds the self-hosted Fraunces and Plus Jakarta Sans fonts (latin subset).
 - `_headers` sets long cache times on Netlify for fonts and stickers.
+- `stickers/<character>/gif/` holds a moving GIF of each sticker. When the **Moving** switch is on, copying puts a web picture pointing at the hosted GIF on the clipboard (with the PNG as a backup), and Teams loads it and plays it. This only works from the hosted site, not a local file. The page itself shows the animated WebP copies in `stickers/<character>/anim/`. New stickers need a GIF and an animated WebP too.
 - `stickers/data.js` holds embedded copies of the stickers, so copying also works when `index.html` is opened as a local file.
 
 ## Hosting

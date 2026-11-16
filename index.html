@@ -41,7 +41,14 @@
   <nav id="picker" role="tablist" aria-label="Choose a character">
     <span class="indicator" aria-hidden="true"></span>
   </nav>
-  <p id="count" class="count" aria-live="polite"></p>
+  <div class="bar-end">
+    <p id="count" class="count" aria-live="polite"></p>
+    <label class="motion-toggle" title="Copy stickers that move in Teams">
+      <input type="checkbox" id="motion" role="switch">
+      <span class="switch" aria-hidden="true"></span>
+      <span class="motion-label">Moving</span>
+    </label>
+  </div>
 </div>
 
 <main id="grid" aria-label="Stickers"></main>
