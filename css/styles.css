@@ -242,6 +242,28 @@ button.tab:focus-visible { outline: 3px solid var(--ring); outline-offset: 1px; 
 @media (hover: hover) and (pointer: fine) {
   button.tab:not([aria-selected="true"]):hover { color: var(--ink); }
 }
+.bar-end { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+body.requesting .motion-toggle { display: none; }
+.motion-toggle {
+  display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none;
+  height: 40px; padding: 0 14px 0 8px; border-radius: 999px;
+  background: var(--glass); border: 1px solid var(--line); box-shadow: var(--shadow-sm);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  font-size: .88rem; font-weight: 700; color: var(--ink-soft);
+}
+.motion-toggle input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.motion-toggle .switch {
+  position: relative; width: 38px; height: 22px; border-radius: 999px; flex-shrink: 0;
+  background: var(--line-strong); transition: background 200ms ease;
+}
+.motion-toggle .switch::after {
+  content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%;
+  background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform 240ms var(--ease-out);
+}
+.motion-toggle input:checked + .switch { background: var(--accent); }
+.motion-toggle input:checked + .switch::after { transform: translateX(16px); }
+.motion-toggle input:checked ~ .motion-label { color: var(--ink); }
+.motion-toggle input:focus-visible + .switch { box-shadow: 0 0 0 3px var(--ring); }
 .count { margin: 0; font-size: .85rem; font-weight: 600; color: var(--muted); white-space: nowrap; }
 
 /* ---------- Sticker grid ---------- */
@@ -471,6 +493,9 @@ footer strong { color: var(--ink-soft); }
   button.tab .avatar { width: 32px; height: 32px; }
   button.tab .avatar img { width: 30px; height: 30px; }
   .steps li { font-size: .82rem; }
+  .bar { flex-wrap: wrap; row-gap: 8px; }
+  .bar-end { width: 100%; justify-content: flex-end; }
+  .motion-toggle { height: 34px; font-size: .82rem; }
 }
 
 /* ---------- Motion preferences ---------- */

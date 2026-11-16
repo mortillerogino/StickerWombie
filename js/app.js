@@ -43,6 +43,13 @@ if (isMac) document.getElementById('paste-keys').innerHTML = '<kbd>⌘</kbd><kbd
 // Small WebP copies are shown on the page; the full PNG is what gets copied.
 const displaySrc = (id, file) => `stickers/${id}/web/${file}.webp`;
 const fullSrc = (id, file) => `stickers/${id}/${file}.png`;
+// Moving versions. Teams loads these from the site when a copied web picture is pasted.
+const gifSrc = (id, file) => `stickers/${id}/gif/${file}.gif`;
+
+// Stickers stay still unless the "Moving" switch is on; the choice is remembered.
+const motionToggle = document.getElementById('motion');
+let moving = false;
+try { moving = localStorage.getItem('moving') === '1'; } catch {}
 
 function showToast(html, { warn = false, img = '' } = {}) {
   toastText.innerHTML = html;
@@ -91,10 +98,19 @@ function pngBlob(src) {
   return pngCache.get(src);
 }
 
-async function copySticker(src) {
+async function copySticker(src, gif, img) {
   if (!navigator.clipboard || typeof ClipboardItem === 'undefined') throw new Error('unsupported');
+  const item = { 'image/png': pngBlob(src) };
+  // Moving stickers go on the clipboard as a web picture that points at the hosted GIF,
+  // which Teams fetches and plays. The still PNG stays as a backup for other apps.
+  if (moving && !isLocalFile) {
+    const url = new URL(gif, location.href).href;
+    const size = img.naturalWidth ? ` width="${img.naturalWidth}" height="${img.naturalHeight}"` : '';
+    item['text/html'] = new Blob([`<img src="${url}" alt="${img.alt.replace(/"/g, '&quot;')}"${size}>`], { type: 'text/html' });
+    item['text/plain'] = new Blob([url], { type: 'text/plain' });
+  }
   // Pass a promise so Safari keeps the click's user activation while the image loads.
-  await navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob(src) })]);
+  await navigator.clipboard.write([new ClipboardItem(item)]);
 }
 
 const CHECK_SVG = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
@@ -104,6 +120,7 @@ function renderGrid(character) {
   const frag = document.createDocumentFragment();
   character.stickers.forEach(([file, label], i) => {
     const src = fullSrc(character.id, file);
+    const gif = gifSrc(character.id, file);
     const btn = document.createElement('button');
     btn.className = 'sticker';
     btn.type = 'button';
@@ -119,14 +136,14 @@ function renderGrid(character) {
     const reveal = () => btn.classList.add('loaded');
     img.addEventListener('load', reveal, { once: true });
     img.addEventListener('error', reveal, { once: true });
-    img.src = displaySrc(character.id, file);
+    img.src = moving && !isLocalFile ? gif : displaySrc(character.id, file);
     if (img.complete) reveal();
 
     btn.addEventListener('pointerenter', () => { if (!isLocalFile) pngBlob(src); }, { once: true });
     let copiedTimer;
     btn.addEventListener('click', async () => {
       try {
-        await copySticker(src);
+        await copySticker(src, gif, img);
         btn.classList.add('just-copied');
         clearTimeout(copiedTimer);
         copiedTimer = setTimeout(() => btn.classList.remove('just-copied'), 1400);
@@ -141,6 +158,15 @@ function renderGrid(character) {
   grid.replaceChildren(frag);
   countEl.textContent = `${character.stickers.length} stickers`;
 }
+
+motionToggle.checked = moving;
+if (isLocalFile) motionToggle.closest('label').hidden = true;
+motionToggle.addEventListener('change', () => {
+  moving = motionToggle.checked;
+  try { localStorage.setItem('moving', moving ? '1' : '0'); } catch {}
+  const character = CHARACTERS.find(c => c.id === currentId);
+  if (character) renderGrid(character);
+});
 
 // Warm the browser cache for a character's pictures (used when hovering its tab).
 const warmed = new Set();
