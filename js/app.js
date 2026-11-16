@@ -13,6 +13,7 @@ const CHARACTERS = [
       ['13-laptop-meltdown', 'Laptop meltdown'], ['14-downtime', 'Downtime'],
       ['15-lunch-orders', 'Lunch orders?'], ['16-im-sorry', "I'm sorry"],
       ['17-logging-off', 'Logging off!'],
+      ['18-challenge', 'Challenge'], ['19-bow-down', 'Bow down'], ['20-knighted', 'Knighted'],
     ],
   },
   {
