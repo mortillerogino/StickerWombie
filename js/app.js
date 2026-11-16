@@ -10,7 +10,7 @@ const CHARACTERS = [
       ['04-thumbs-up', 'Thumbs up'], ['05-shocked', 'Shocked'], ['06-love-savings', 'Love savings'],
       ['07-sleepy', 'Sleepy'], ['08-celebrate', 'Celebrate'], ['09-thinking', 'Thinking'],
       ['10-youve-got-this', "You've got this!"], ['11-money', 'Money'], ['12-facepalm', 'Facepalm'],
-      ['13-laptop-meltdown', 'Laptop meltdown'],
+      ['13-laptop-meltdown', 'Laptop meltdown'], ['14-downtime', 'Downtime'],
     ],
   },
   {
@@ -44,7 +44,7 @@ if (isMac) document.getElementById('paste-keys').innerHTML = '<kbd>⌘</kbd><kbd
 // Small WebP copies are shown on the page; the full PNG is what gets copied.
 // Bump when sticker pictures change, so browsers and Teams fetch the new files
 // instead of a cached copy (stickers are cached for a week).
-const V = '?v=2';
+const V = '?v=3';
 const displaySrc = (id, file) => `stickers/${id}/web/${file}.webp${V}`;
 const fullSrc = (id, file) => `stickers/${id}/${file}.png${V}`;
 // Moving versions. Teams loads these from the site when a copied web picture is pasted.
