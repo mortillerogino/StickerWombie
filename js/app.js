@@ -30,6 +30,7 @@ const CHARACTERS = [
       ['16-on-a-call', 'On a call'], ['17-on-it', 'On it!'], ['18-approved', 'Approved!'],
       ['19-tea-time', 'Tea time'], ['20-thank-you', 'Thank you!'], ['21-hmm', 'Hmm...'],
       ['22-hello', 'Hello!'], ['23-lunch', 'Lunch?'], ['24-logging-off', 'Logging off!'],
+      ['25-grumpy-cat', 'Grumpy cat'],
     ],
   },
 ];
